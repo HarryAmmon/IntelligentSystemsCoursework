@@ -15,17 +15,20 @@ Y = data.values[:,-1]                                                           
 X_train, X_test, Y_train, Y_test = train_test_split(X,Y,test_size=0.2)
 print("Data has been split")
 
-# Create the neural network
-mlp = MLPClassifier()
-# Train the neural network
-mlp.fit(X_train, Y_train)
-parametersMLP = {
+mlp = MLPClassifier()                                                           # Create the neural network
+
+mlp.fit(X_train, Y_train)                                                       # Train the neural network
+parametersMLP = {                                                               # Define some paramaters
     'solver': ['lbfgs', 'sgd', 'adam'],
     'activation' : ['identity', 'logistic', 'tanh', 'relu'],
     'hidden_layer_sizes': [(7,7),(7),(6,6),(5,5,5),(2,2,2,2,2,2),(10),(20)]
 }
-GS = GridSearchCV(estimator = mlp, param_grid = parameters, cv=5)
-GS.fit(X_test,Y_test)
-print("Best parameters are: ",GS.best_params_)
-print("Best score is: ",GS.best_score_)
-print(GS.score(X_test,Y_test))
+
+def paramSearch(model, parameters, cv):
+    GS = GridSearchCV(estimator = model, param_grid = parameters, cv=cv)
+    GS.fit(X_test,Y_test)
+    print("Best parameters are: ",GS.best_params_)
+    print("Best score is: ",GS.best_score_)
+    print(GS.score(X_test,Y_test))
+
+paramSearch(mlp,parametersMLP,5)
